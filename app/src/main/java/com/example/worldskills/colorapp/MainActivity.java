@@ -1,5 +1,7 @@
 package com.example.worldskills.colorapp;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.worldskills.colorapp.clases.Conexion;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btn1,btn2,btn3,btn4;
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         juegoPorTiempo=consultarModoJuego();
 
         if (juegoPorTiempo==false){
-
             lblOpcionalNombre.setText("Intentos restantes");
             lblOpcionalValor.setText(Integer.toString(intentosRestantes));
         }else{
@@ -103,7 +106,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean consultarModoJuego() {
-        return true;
+
+        String sql="select * from configuracion";
+        Conexion conexion=new Conexion(this);
+        SQLiteDatabase db=conexion.getReadableDatabase();
+        Cursor cursor=db.rawQuery(sql,null);
+        cursor.moveToNext();
+        if (cursor.getString(0).equals("-1")){
+            return false;
+        }else{
+            return true;
+        }
+
     }
 
     private void recargarJuego() {
