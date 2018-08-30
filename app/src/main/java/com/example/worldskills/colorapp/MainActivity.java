@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor cursor=db.rawQuery(sql,null);
         cursor.moveToNext();
         if (cursor.getString(0).equals("-1")){
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
             return false;
         }else{
             return true;
