@@ -34,7 +34,7 @@ public class PuntajesActivity extends AppCompatActivity {
             Cursor cursor = database.rawQuery("SELECT * FROM puntuacion WHERE intentos = 3 AND milisegundos = 3000 ORDER BY puntaje DESC LIMIT 4", null);
             int i = 1;
             while (cursor.moveToNext()){
-                list.add(i+". "+cursor.getString(1));
+                list.add(i+".    "+cursor.getString(1));
                 i++;
             }
             ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
