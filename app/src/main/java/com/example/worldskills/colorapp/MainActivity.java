@@ -1,13 +1,17 @@
 package com.example.worldskills.colorapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int desplegados=0;
     long tiempoDesaparece=3000;
     int intentosRestantes=3;
-    int tiempoTotal=10000;
-
+    long tiempoTotal=10000;
+    long tiempoCorriendo=0;
+    long pausaTiempo=0;
+    boolean isPause=false;
 
     CountDownTimer timerCambio;
     CountDownTimer timerTotal;
@@ -73,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTick(long millisUntilFinished) {
                 lbltickCambiar.setText(Long.toString(millisUntilFinished/1000));
-
             }
 
             @Override
@@ -85,17 +90,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void iniciarJuegoConTiempo() {
+        if (isPause==true){
+            tiempoTotal=pausaTiempo;
+        }
         timerTotal=new CountDownTimer(tiempoTotal,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 lblOpcionalValor.setText(Long.toString(millisUntilFinished/1000));
+                tiempoCorriendo=millisUntilFinished;
+                if (isPause==true){
+                    isPause=false;
+                }
             }
-
             @Override
             public void onFinish() {
-                terminarJuego();
+                if (isPause==true){
+
+                }else{
+                    terminarJuego();
+                }
             }
         }.start();
+
     }
 
     private void disabledButton() {
@@ -103,25 +119,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn2.setEnabled(false);
         btn3.setEnabled(false);
         btn4.setEnabled(false);
+        ImageButton button=findViewById(R.id.btnPause);
+        button.setEnabled(false);
     }
 
     private boolean consultarModoJuego() {
-
+        boolean retornar=false;
         String sql="select * from configuracion";
         Conexion conexion=new Conexion(this);
         SQLiteDatabase db=conexion.getReadableDatabase();
         Cursor cursor=db.rawQuery(sql,null);
         cursor.moveToNext();
         if (cursor.getString(0).equals("-1")){
-            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-            return false;
-        }else{
-            return true;
+            intentosRestantes=Integer.parseInt(cursor.getString(1));
+            tiempoDesaparece=Integer.parseInt(cursor.getString(2));
+            retornar= false;
+        }if (!cursor.getString(0).equals("-1")){
+            tiempoTotal=Integer.parseInt(cursor.getString(0));
+            tiempoDesaparece=Integer.parseInt(cursor.getString(2));
+            retornar= true;
         }
-
+        if (cursor.getString(1).equals("3") && cursor.getString(2).equals("3000") ){
+            intentosRestantes=3;
+            tiempoDesaparece=3000;
+            retornar= false;
+        }
+        return retornar;
     }
 
     private void recargarJuego() {
+
         desplegados++;
         colorSelccionado=0;
         timerCambio.cancel();
@@ -211,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recargarJuego();
                 intentosRestantes--;
                 recargarLabel();
-                if (intentosRestantes>0){
+                if (intentosRestantes<=0){
                     disabledButton();
                     terminarJuego();
                 }
@@ -226,7 +253,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void terminarJuego() {
         timerCambio.cancel();
         disabledButton();
-        Toast.makeText(this, "juego terminado", Toast.LENGTH_SHORT).show();
+        abrirVentanaResultados();
+    }
+
+    private void abrirVentanaResultados() {
+        AlertDialog.Builder ventana=new AlertDialog.Builder(MainActivity.this);
+
     }
 
 
@@ -243,5 +275,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lblOpcionalValor.setText(Integer.toString(intentosRestantes));
 
         }
+    }
+
+    public void pause(View view) {
+        timerCambio.cancel();
+        if (juegoPorTiempo==true){
+            pausaTiempo=tiempoCorriendo;
+            timerTotal.cancel();
+            isPause=true;
+
+        }
+        AlertDialog.Builder pausa=new AlertDialog.Builder(MainActivity.this);
+        pausa.setTitle("JUEGO PAUSADO");
+        pausa.setMessage("desea continuar");
+        pausa.setCancelable(false);
+        pausa.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (juegoPorTiempo==true){
+                    iniciarJuegoConTiempo();
+                }
+                recargarJuego();
+            }
+        });
+        pausa.show();
     }
 }
