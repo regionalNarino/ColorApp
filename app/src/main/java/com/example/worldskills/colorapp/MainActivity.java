@@ -16,6 +16,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int buttonColor[]=new int[4];
 
     int colorSelccionado=0;
+    int contadorAciertos=0;
+    int desplegados=0;
+    int timempoDesaparece=3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn3=findViewById(R.id.btn3);
         btn4=findViewById(R.id.btn4);
         lblNombreColor=findViewById(R.id.colorName);
+        lblDesplegadas=findViewById(R.id.palabrasDesplegadas);
+        lblCorrectas=findViewById(R.id.palabrasCorrectas);
+        lblOpcionalNombre=findViewById(R.id.opcionalNombre);
+        lblOpcionalValor=findViewById(R.id.opcionalPuntaje);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
@@ -34,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn4.setOnClickListener(this);
 
         generarLista();
+
+
 
     }
 
@@ -70,7 +80,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn1:
-                colorSelccionado=btn1.getCurrentTextColor();
+                colorSelccionado=buttonColor[0];
+                comparar();
+                break;
+            case R.id.btn2:
+                colorSelccionado=buttonColor[1];
+                comparar();
+                break;
+            case R.id.btn3:
+                colorSelccionado=buttonColor[2];
+                comparar();
+                break;
+            case R.id.btn4:
+                colorSelccionado=buttonColor[3];
                 comparar();
                 break;
         }
@@ -78,13 +100,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void comparar() {
         //comparar si los nombres de los colores son iguales.
-        if (btn1.getCurrentTextColor()== colorSelccionado){aumentarPuntos();};
-        if (btn2.getCurrentTextColor()== colorSelccionado){aumentarPuntos();};
-        if (btn3.getCurrentTextColor()== colorSelccionado){aumentarPuntos();};
-        if (btn4.getCurrentTextColor()== colorSelccionado){aumentarPuntos();};
+        if (lblNombreColor .getCurrentTextColor()== colorSelccionado){aumentarPuntos();}
+        else{ reducirPuntos();}
+    }
+
+    private void reducirPuntos() {
+
     }
 
     private void aumentarPuntos() {
+        contadorAciertos++;
+        recargarLabel();
+        cambiarColores();
+    }
 
+    private void cambiarColores() {
+
+    }
+
+    private void recargarLabel() {
+        lblDesplegadas.setText(Integer.toString(contadorAciertos));
     }
 }
