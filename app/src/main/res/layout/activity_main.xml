@@ -6,13 +6,144 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/colorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="Color"
+            android:textSize="150sp"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn1"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="#222" />
+
+                <Button
+                    android:id="@+id/btn2"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="#222" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn3"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="#222" />
+
+                <Button
+                    android:id="@+id/btn4"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="#222" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#222"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad de palabras desplegadas"
+                android:textColor="#aea60e"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/palabrasDesplegadas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="0"
+                android:textColor="#aea60e"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad de palabras desplegadas"
+                android:textColor="#2bec0d"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/palabrasCorrectas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="0"
+                android:textColor="#2bec0d"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/opcionalNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad de palabras desplegadas"
+                android:textColor="#e13308"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/opcionalPuntaje"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="0"
+                android:textColor="#e13308"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
