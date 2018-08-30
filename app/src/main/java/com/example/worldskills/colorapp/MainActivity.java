@@ -1,15 +1,18 @@
 package com.example.worldskills.colorapp;
 
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btn1,btn2,btn3,btn4;
-    TextView lblNombreColor,lblDesplegadas,lblCorrectas,lblOpcionalNombre,lblOpcionalValor;
+    TextView lblNombreColor,lblDesplegadas,lblCorrectas,lblOpcionalNombre,lblOpcionalValor,lbltickCambiar;
 
     int colores[]={Color.YELLOW,Color.RED,Color.BLUE,Color.GREEN};
     String [] coloresName={"Amarillo","Rojo","Azul","Verde"};
@@ -18,9 +21,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int colorSelccionado=0;
     int contadorAciertos=0;
     int desplegados=0;
-    int timempoDesaparece=3;
+    long tiempoDesaparece=3000;
+    int intentosRestantes=3;
 
-
+    CountDownTimer timerCambio;
+    LinearLayout tiempoTotalLayout;
+    boolean juegoPorTiempo=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,19 +41,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lblCorrectas=findViewById(R.id.palabrasCorrectas);
         lblOpcionalNombre=findViewById(R.id.opcionalNombre);
         lblOpcionalValor=findViewById(R.id.opcionalPuntaje);
+        lbltickCambiar=findViewById(R.id.tickCambiar);
+        tiempoTotalLayout=findViewById(R.id.layoutTiempo);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
         btn4.setOnClickListener(this);
 
+        juegoPorTiempo=consultarModoJuego();
+
+        if (juegoPorTiempo==false){
+            tiempoTotalLayout.setVisibility(View.INVISIBLE);
+            lblOpcionalNombre.setText("Intentos restantes");
+        }else{
+            tiempoTotalLayout.setVisibility(View.INVISIBLE);
+        }
+
         generarLista();
+        timerCambio=new CountDownTimer(tiempoDesaparece,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                lbltickCambiar.setText(Long.toString(millisUntilFinished/1000));
 
+            }
 
+            @Override
+            public void onFinish() {
+               recargarJuego();
+            }
+        }.start();
 
     }
 
+    private boolean consultarModoJuego() {
+        return false;
+    }
+
+    private void recargarJuego() {
+        colorSelccionado=0;
+        timerCambio.cancel();
+        generarLista();
+        timerCambio=new CountDownTimer(tiempoDesaparece,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                lbltickCambiar.setText(Long.toString(millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+                recargarJuego();
+                comparar();
+            }
+        }.start();
+    }
+
     private void generarLista() {
+        buttonColor=new int[4];
         for (int i=0; i< colores.length;){
             int aleatorio= (int) (Math.random()*4);
             if (buttonColor[aleatorio]==0){
@@ -100,25 +150,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void comparar() {
         //comparar si los nombres de los colores son iguales.
-        if (lblNombreColor .getCurrentTextColor()== colorSelccionado){aumentarPuntos();}
-        else{ reducirPuntos();}
+        if (lblNombreColor .getCurrentTextColor()== colorSelccionado){
+            aumentarPuntos();
+        }
+        else{
+            if (juegoPorTiempo==false){
+                intentosRestantes--;
+                recargarLabel();
+                if (intentosRestantes==0){
+                    terminarJuego();
+                }
+            }
+        }
+
     }
 
-    private void reducirPuntos() {
-
+    private void terminarJuego() {
+        Toast.makeText(this, "juego terminado", Toast.LENGTH_SHORT).show();
     }
+
 
     private void aumentarPuntos() {
         contadorAciertos++;
         recargarLabel();
-        cambiarColores();
-    }
-
-    private void cambiarColores() {
-
     }
 
     private void recargarLabel() {
-        lblDesplegadas.setText(Integer.toString(contadorAciertos));
+        lblCorrectas.setText(Integer.toString(contadorAciertos));
+        lblOpcionalValor.setText(Integer.toString(intentosRestantes));
     }
 }
