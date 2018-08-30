@@ -18,8 +18,7 @@ public class Conexion extends SQLiteOpenHelper{
             db.execSQL("CREATE TABLE puntuacion (id INTEGER PRIMARY KEY AUTOINCREMENT, puntaje INTEGER, intentos INTEGER, milisegundos INTEGER)");
             db.execSQL("INSERT INTO configuracion (tiempo, intentos, milisegundos) VALUES (10000, -1, 3000)");
             db.execSQL("INSERT INTO puntuacion (puntaje, intentos, milisegundos) VALUES (0, 3, 3000)");
-            db.execSQL("INSERT INTO puntuacion (puntaje, intentos, milisegundos) VALUES (1, 3, 7000)");
-            db.execSQL("INSERT INTO puntuacion (puntaje, intentos, milisegundos) VALUES (1, 3, 7000)");
+
         } catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }

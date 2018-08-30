@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int contadorFallidas=0;
 
+    int numeroPausas=0;
+
 
     CountDownTimer timerCambio;
     CountDownTimer timerTotal;
@@ -124,8 +126,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn2.setEnabled(false);
         btn3.setEnabled(false);
         btn4.setEnabled(false);
-        ImageButton button=findViewById(R.id.btnPause);
-        button.setEnabled(false);
     }
 
     private boolean consultarModoJuego() {
@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else{
             if (juegoPorTiempo==false){
                 recargarJuego();
+                contadorFallidas++;
                 intentosRestantes--;
                 recargarLabel();
                 if (intentosRestantes<=0){
@@ -248,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     terminarJuego();
                 }
             }else{
-                contadorFallidas++;
                 recargarJuego();
                 recargarLabel();
             }
@@ -258,6 +258,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void terminarJuego() {
         timerCambio.cancel();
+        ImageButton button=findViewById(R.id.btnPause);
+        button.setEnabled(false);
         disabledButton();
         guardarResultados();
         abrirVentanaResultados();
@@ -320,6 +322,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void pause(View view) {
+        numeroPausas++;
+        if (numeroPausas==2){
+            ImageButton button=findViewById(R.id.btnPause);
+            button.setEnabled(false);
+        }
         timerCambio.cancel();
         if (juegoPorTiempo==true){
             pausaTiempo=tiempoCorriendo;

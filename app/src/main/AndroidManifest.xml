@@ -12,7 +12,12 @@
         <activity android:name=".MainActivity">
 
         </activity>
-        <activity android:name=".ConfiguracionActivity"></activity>
+        <activity android:name=".ConfiguracionActivity">
+
+        </activity>
+        <activity android:name=".PuntajesActivity">
+
+        </activity>
         <activity android:name=".MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

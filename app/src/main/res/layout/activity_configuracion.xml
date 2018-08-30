@@ -75,10 +75,10 @@
 
     <TextView
         android:id="@+id/txtTiempoIntentos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="272dp"
+        android:layout_width="124dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="208dp"
         app:layout_constraintStart_toEndOf="@+id/radioGroup"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,22 +116,22 @@
 
     <EditText
         android:id="@+id/txtNumber"
-        android:layout_width="131dp"
+        android:layout_width="128dp"
         android:layout_height="50dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="252dp"
+        android:layout_marginEnd="84dp"
         android:ems="10"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="@+id/txtTiempoIntentos"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTiempoIntentos" />
 
     <EditText
         android:id="@+id/txtNumber2"
         android:layout_width="131dp"
         android:layout_height="50dp"
-        android:layout_marginTop="560dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="428dp"
         android:ems="10"
         android:inputType="number"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="431dp" />
+        app:layout_constraintStart_toEndOf="@+id/radioGroup2"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
