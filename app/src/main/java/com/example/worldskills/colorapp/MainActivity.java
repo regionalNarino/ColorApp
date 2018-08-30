@@ -23,8 +23,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int desplegados=0;
     long tiempoDesaparece=3000;
     int intentosRestantes=3;
+    int tiempoTotal=10000;
+
 
     CountDownTimer timerCambio;
+    CountDownTimer timerTotal;
     LinearLayout tiempoTotalLayout;
     boolean juegoPorTiempo=false;
     @Override
@@ -54,12 +57,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (juegoPorTiempo==false){
             tiempoTotalLayout.setVisibility(View.INVISIBLE);
             lblOpcionalNombre.setText("Intentos restantes");
+            lblOpcionalValor.setText(Integer.toString(intentosRestantes));
         }else{
+            iniciarJuegoConTiempo();
             tiempoTotalLayout.setVisibility(View.INVISIBLE);
+            lblOpcionalNombre.setText("Tiempo restante");
+            lblOpcionalValor.setText("hola");
         }
 
         generarLista();
+        desplegados++;
+        recargarLabel();
         timerCambio=new CountDownTimer(tiempoDesaparece,1000) {
+
             @Override
             public void onTick(long millisUntilFinished) {
                 lbltickCambiar.setText(Long.toString(millisUntilFinished/1000));
@@ -68,17 +78,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-               recargarJuego();
+                comparar();
             }
         }.start();
 
     }
 
+    private void iniciarJuegoConTiempo() {
+        timerTotal=new CountDownTimer(tiempoTotal,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                lblOpcionalValor.setText(Long.toString(millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+                terminarJuego();
+            }
+        }.start();
+    }
+
+    private void disabledButton() {
+        btn1.setEnabled(false);
+        btn2.setEnabled(false);
+        btn3.setEnabled(false);
+        btn4.setEnabled(false);
+    }
+
     private boolean consultarModoJuego() {
-        return false;
+        return true;
     }
 
     private void recargarJuego() {
+        desplegados++;
         colorSelccionado=0;
         timerCambio.cancel();
         generarLista();
@@ -90,13 +122,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                recargarJuego();
                 comparar();
             }
         }.start();
     }
 
+    private void enabledButton() {
+        btn1.setEnabled(true);
+        btn2.setEnabled(true);
+        btn3.setEnabled(true);
+        btn4.setEnabled(true);
+    }
+
     private void generarLista() {
+        enabledButton();
         buttonColor=new int[4];
         for (int i=0; i< colores.length;){
             int aleatorio= (int) (Math.random()*4);
@@ -152,20 +191,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //comparar si los nombres de los colores son iguales.
         if (lblNombreColor .getCurrentTextColor()== colorSelccionado){
             aumentarPuntos();
+            recargarJuego();
         }
         else{
             if (juegoPorTiempo==false){
+                recargarJuego();
                 intentosRestantes--;
                 recargarLabel();
-                if (intentosRestantes==0){
+                if (intentosRestantes>0){
+                    disabledButton();
                     terminarJuego();
                 }
+            }else{
+                recargarJuego();
+                recargarLabel();
             }
         }
 
     }
 
     private void terminarJuego() {
+        timerCambio.cancel();
+        disabledButton();
         Toast.makeText(this, "juego terminado", Toast.LENGTH_SHORT).show();
     }
 
@@ -177,6 +224,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void recargarLabel() {
         lblCorrectas.setText(Integer.toString(contadorAciertos));
-        lblOpcionalValor.setText(Integer.toString(intentosRestantes));
+
+        lblDesplegadas.setText(Integer.toString(desplegados));
+        if (juegoPorTiempo==false){
+            lblOpcionalValor.setText(Integer.toString(intentosRestantes));
+
+        }
     }
 }
