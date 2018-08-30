@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     CountDownTimer timerCambio;
     CountDownTimer timerTotal;
-    LinearLayout tiempoTotalLayout;
     boolean juegoPorTiempo=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lblOpcionalNombre=findViewById(R.id.opcionalNombre);
         lblOpcionalValor=findViewById(R.id.opcionalPuntaje);
         lbltickCambiar=findViewById(R.id.tickCambiar);
-        tiempoTotalLayout=findViewById(R.id.layoutTiempo);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
@@ -55,12 +53,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         juegoPorTiempo=consultarModoJuego();
 
         if (juegoPorTiempo==false){
-            tiempoTotalLayout.setVisibility(View.INVISIBLE);
+
             lblOpcionalNombre.setText("Intentos restantes");
             lblOpcionalValor.setText(Integer.toString(intentosRestantes));
         }else{
             iniciarJuegoConTiempo();
-            tiempoTotalLayout.setVisibility(View.INVISIBLE);
             lblOpcionalNombre.setText("Tiempo restante");
             lblOpcionalValor.setText("hola");
         }
