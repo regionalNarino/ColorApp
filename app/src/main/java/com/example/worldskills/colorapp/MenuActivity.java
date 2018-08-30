@@ -20,6 +20,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void jugar(View view) {
         Intent intent=new Intent(MenuActivity.this,MainActivity.class);
+
         startActivity(intent);
     }
 }
