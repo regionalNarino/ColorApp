@@ -9,6 +9,8 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -35,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     long tiempoCorriendo=0;
     long pausaTiempo=0;
     boolean isPause=false;
+
+    int contadorFallidas=0;
+
 
     CountDownTimer timerCambio;
     CountDownTimer timerTotal;
@@ -243,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     terminarJuego();
                 }
             }else{
+                contadorFallidas++;
                 recargarJuego();
                 recargarLabel();
             }
@@ -253,11 +259,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void terminarJuego() {
         timerCambio.cancel();
         disabledButton();
+        guardarResultados();
         abrirVentanaResultados();
+    }
+
+    private void guardarResultados() {
+        String sql="select * from configuracion";
+        Conexion conexion=new Conexion(this);
+        SQLiteDatabase db=conexion.getReadableDatabase();
+        Cursor cursor=db.rawQuery(sql,null);
+        cursor.moveToNext();
+        if (cursor.getString(1).equals("3") && cursor.getString(2).equals("3000") ){
+            sql="insert into puntuacion(puntaje, intentos, milisegundos) values("+Integer.toString(contadorAciertos)+",3,3000)";
+            SQLiteDatabase db2=conexion.getWritableDatabase();
+            db2.execSQL(sql);
+        }
     }
 
     private void abrirVentanaResultados() {
         AlertDialog.Builder ventana=new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater layout=this.getLayoutInflater();
+        View view=layout.inflate(R.layout.elian_desing_ventana,null,false);
+
+        TextView correctos=view.findViewById(R.id.palabrasCorrectas);
+        TextView fallidos=view.findViewById(R.id.palabrasFallidas);
+        Button button=view.findViewById(R.id.menuPrincipal);
+
+        correctos.setText(Integer.toString(contadorAciertos));
+        fallidos.setText(Integer.toString(contadorFallidas));
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(intent);
+            }
+        });
+        ventana.setView(view);
+        ventana.create();
+        ventana.setCancelable(false);
+
+        ventana.show();
 
     }
 
